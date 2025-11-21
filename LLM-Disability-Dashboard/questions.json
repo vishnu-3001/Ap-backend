@@ -1,0 +1,46 @@
+{
+  "questions": [
+    {
+      "question": "Simplify the following expression: 3/4 + 1/2",
+      "mistakes": [
+        "Adding numerators directly"
+      ],
+      "reasons": [
+        "Incorrect approach to adding fractions",
+        "Potential confusion with fractions"
+      ],
+      "approaches": [
+        "Find a common denominator before adding",
+        "Think about the parts of a whole when adding fractions"
+      ]
+    },
+    {
+      "question": "Find a common denominator for the following fractions: 2/5, 3/8, and 1/10",
+      "mistakes": [
+        "Difficulty finding common denominators"
+      ],
+      "reasons": [
+        "Struggle with finding the least common multiple",
+        "Mistakes may occur due to adding fractions with different denominators"
+      ],
+      "approaches": [
+        "Identify the smallest number that all denominators can divide into",
+        "Scaffold by breaking down each denominator into prime factors"
+      ]
+    },
+    {
+      "question": "Compare the following fractions: 2/3 and 5/6. Use <, >, or = to show your answer.",
+      "mistakes": [
+        "Misinterpreting the relationship between fractions"
+      ],
+      "reasons": [
+        "Potential confusion between fraction sizes",
+        "Difficulty in comparing fractions with different denominators"
+      ],
+      "approaches": [
+        "Convert fractions to have a common denominator for comparison",
+        "Visualize the fractions on a number line to understand their relative sizes"
+      ]
+    }
+  ]
+}
