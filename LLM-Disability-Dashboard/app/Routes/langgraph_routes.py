@@ -88,14 +88,14 @@ async def generate_problem(payload: ProblemGenerationRequest) -> Dict[str, Any]:
     try:
         print("Invoking LangGraph...", flush=True)
         return await run_problem_workflow(payload.to_payload())
-    except HTTPException:
+    except HTTPException as e:
         print(f"CRITICAL ERROR: {str(e)}", flush=True)
         print(traceback.format_exc(), flush=True)
         raise
-    except Exception as exc:  # pragma: no cover - runtime safety
+    except Exception as e:  # pragma: no cover - runtime safety
         print(f"CRITICAL ERROR: {str(e)}", flush=True)
         print(traceback.format_exc(), flush=True)
-        raise HTTPException(status_code=500, detail=str(exc)) from exc
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @langgraph_router.post("/analysis")
