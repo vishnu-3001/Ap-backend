@@ -5,11 +5,17 @@ uvicorn>=0.28.0
 python-multipart>=0.0.20
 python-dotenv>=1.0.1
 
-# AI & LangChain (The Essentials)
-openai>=1.59.5
-langchain>=0.3.20
-langchain-core>=0.3.58
-langchain-community>=0.3.14
-langchain-openai>=0.3.8
-langgraph>=0.5.4
-langgraph-checkpoint>=2.1.1
+# AI Framework - PINNED TO VERSION 0.2 (The "Bridge" version)
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-core==0.2.38
+langchain-openai==0.1.23
+langchain-text-splitters==0.2.4
+
+# LangGraph (Compatible with 0.2)
+langgraph==0.1.4
+# Note: We had to lower langgraph slightly to ensure it matches langchain 0.2
+
+# Integrations
+openai>=1.30.0
+
