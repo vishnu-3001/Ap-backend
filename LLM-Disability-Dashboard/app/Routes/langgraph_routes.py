@@ -6,6 +6,10 @@ from typing import Any, Dict, List, Optional, Union
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from fastapi import Body
+import traceback
+import logging
+
+logger = logging.getLogger("uvicorn")
 
 from app.services.langgraph_service import (
     run_analysis_workflow,
@@ -80,11 +84,17 @@ async def run_langgraph_full_workflow(payload: FullWorkflowRequest) -> Dict[str,
 
 @langgraph_router.post("/generate-problem")
 async def generate_problem(payload: ProblemGenerationRequest) -> Dict[str, Any]:
+    print("--- REQUEST RECEIVED ---", flush=True)  # Force print
     try:
+        print("Invoking LangGraph...", flush=True)
         return await run_problem_workflow(payload.to_payload())
     except HTTPException:
+        print(f"CRITICAL ERROR: {str(e)}", flush=True)
+        print(traceback.format_exc(), flush=True)
         raise
     except Exception as exc:  # pragma: no cover - runtime safety
+        print(f"CRITICAL ERROR: {str(e)}", flush=True)
+        print(traceback.format_exc(), flush=True)
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
 
