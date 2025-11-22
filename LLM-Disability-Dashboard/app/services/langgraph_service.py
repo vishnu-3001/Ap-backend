@@ -61,6 +61,7 @@ async def run_problem_workflow(payload: Dict[str, Any]) -> Dict[str, Any]:
         state.get("difficulty", "medium"),
         use_cache=use_cache,
     )
+    print(problem)
     state["problem"] = problem
     sanitized = orchestrator.sanitize_state(state)
     return orchestrator.format_workflow_results(
