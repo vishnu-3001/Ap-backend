@@ -70,6 +70,7 @@ async def healthcheck() -> Dict[str, Any]:
 @langgraph_router.post("/full-workflow")
 async def run_langgraph_full_workflow(payload: FullWorkflowRequest) -> Dict[str, Any]:
     try:
+        print("you called me")
         return await run_full_workflow(payload.to_payload("full"))
     except HTTPException:
         raise
