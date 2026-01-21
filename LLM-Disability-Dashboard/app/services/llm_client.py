@@ -66,10 +66,26 @@ class LLMClient:
         use_cache: bool = True,
     ) -> JSONLike:
         """Execute a direct prompt call to OpenAI and return normalized JSON response."""
-        
+        messages = [{"role": "user", "content": prompt}]
+        return await self.invoke_chat(
+            messages=messages,
+            model=model,
+            temperature=temperature,
+            use_cache=use_cache,
+        )
+
+    async def invoke_chat(
+        self,
+        messages: List[Dict[str, str]],
+        model: str = "gpt-4o-mini",
+        temperature: float = 0.5,
+        use_cache: bool = True,
+    ) -> JSONLike:
+        """Execute a chat-style prompt call to OpenAI and return normalized JSON response."""
+
         cache_key: Optional[str] = None
         if self._cache_enabled and use_cache:
-            cache_key = self._make_prompt_cache_key(prompt, model, temperature)
+            cache_key = self._make_messages_cache_key(messages, model, temperature)
             cached = self._cache.get(cache_key)
             if cached is not None:
                 self._last_cache_hit = True
@@ -78,26 +94,25 @@ class LLMClient:
         try:
             response = self._openai_client.chat.completions.create(
                 model=model,
-                messages=[{"role": "user", "content": prompt}],
+                messages=messages,
                 temperature=temperature,
-                response_format={"type": "json_object"}
+                response_format={"type": "json_object"},
             )
-            
+
             content = response.choices[0].message.content
             if not content:
                 raise ValueError("Empty response from OpenAI")
-                
-            # Parse JSON response
+
             json_data = json.loads(content)
             normalized = self._normalize_payload(json_data)
-            
+
             self._last_cache_hit = False
-            
+
             if cache_key is not None and self._cache_enabled and use_cache:
                 self._cache.set(cache_key, normalized)
-                
+
             return normalized
-            
+
         except Exception as e:
             raise ValueError(f"Error calling OpenAI: {str(e)}")
 
@@ -184,6 +199,21 @@ class LLMClient:
         payload = {
             "type": "prompt",
             "prompt": prompt,
+            "model": model,
+            "temperature": temperature,
+        }
+        serialized = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+        return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+    def _make_messages_cache_key(
+        self,
+        messages: List[Dict[str, str]],
+        model: str,
+        temperature: float,
+    ) -> str:
+        payload = {
+            "type": "chat",
+            "messages": self._prepare_for_cache(messages),
             "model": model,
             "temperature": temperature,
         }
