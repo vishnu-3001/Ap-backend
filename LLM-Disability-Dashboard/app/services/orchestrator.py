@@ -280,11 +280,15 @@ class LangGraphOrchestrator:
         use_cache = not (str(target).lower() == "likely_incorrect")
 
         # Use the LLM client with structured prompts
-        payload = await self.llm_client.invoke_with_prompt(
-            prompt=prompts["system"],
+        chat_messages = [
+            {"role": "system", "content": prompts["system"]},
+            {"role": "user", "content": prompts["user"]},
+        ]
+        payload = await self.llm_client.invoke_chat(
+            messages=chat_messages,
             model="gpt-4o-mini",
             temperature=1.0,
-            use_cache=use_cache
+            use_cache=use_cache,
         )
         
         if not isinstance(payload, dict):
