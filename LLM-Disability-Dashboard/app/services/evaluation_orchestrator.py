@@ -1,5 +1,5 @@
 from typing import TypedDict,List
-from langgraph.graph import StateGraph,START
+from langgraph.graph import StateGraph
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -140,7 +140,8 @@ def build_student_learning_graph():
     graph.add_node("analyze improvement",analyze_improvement)
     graph.add_node("generate practice problems",generate_practice_problems)
 
-    graph.add_edge(START, "generate summary")
+    graph.set_entry_point("generate summary")
+
     graph.add_edge("generate summary","generate problem")
     graph.add_edge("generate problem","simulate student")
     graph.add_edge("simulate student","analyze improvement")
